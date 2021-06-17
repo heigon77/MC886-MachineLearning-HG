@@ -1,10 +1,7 @@
 class CrossOver():
     "Class CroosOver"
 
-    distCap = 0
-    num7 = 0
-    num3 = 0
-    num5 = 0
+    pmt = []
     agentNum = 0
 
     def __init__(self):
@@ -15,11 +12,29 @@ class CrossOver():
         with open('parameters.txt') as f:
             lines = f.readlines()
             
-            self.distCap, self.num7, self.num3, self.num5 = map(int,lines[self.agentNum].split())
+            self.pmt = lines[self.agentNum].split()
+
+            for i in range(len(self.pmt)):
+                self.pmt[i] = float(self.pmt[i])
     
-    def crossover():
+    def crossover(self):
 
         with open('results.txt') as f:
             lines = f.readlines()
             
-            avgScore, wins, rate = map(int,lines[self.agentNum].split())
+            avgScore = []
+            wins = []
+            rate = []
+
+            for i in range (3):
+                line = lines[i].split()
+                avgScore.append(line[0])
+                wins.append(line[1])
+                rate.append(line[2])
+
+        with open('results.txt','w') as f:
+            f.write("")
+        
+        with open('results.txt','a') as f:
+            string = str((avgScore[0]+avgScore[2])/2) + " " + str(rating[0])  + " " + str(rating[1]) + '\n'
+            f.write(string)
