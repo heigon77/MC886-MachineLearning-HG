@@ -1,4 +1,4 @@
-class CrossOver():
+class ReadWrite():
     "Class CroosOver"
 
     pmt = []
@@ -15,9 +15,12 @@ class CrossOver():
             self.pmt = lines[self.agentNum].split()
 
             for i in range(len(self.pmt)):
-                self.pmt[i] = float(self.pmt[i])
+                if(1<=i<=9):
+                    self.pmt[i] = int(self.pmt[i])
+                else:
+                    self.pmt[i] = float(self.pmt[i])
     
-    def crossover(self):
+    def read(self):
 
         with open('results.txt') as f:
             lines = f.readlines()
