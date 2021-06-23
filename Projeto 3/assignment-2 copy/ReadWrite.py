@@ -1,5 +1,5 @@
 class ReadWrite():
-    "Class CroosOver"
+    "Class that reads files"
 
     pmt = []
     agentNum = 0

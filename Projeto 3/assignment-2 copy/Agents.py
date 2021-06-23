@@ -10,6 +10,7 @@ class DumbAgent(Agent):
     numCaps = None
     GhostVulnerable = False
     Attack = None
+    PreviusMove = None
 
     PossibleDirections = [
         [1,2,3,4], 
@@ -56,24 +57,40 @@ class DumbAgent(Agent):
         
         if(randDir == 1):
             if (Directions.NORTH in state.getLegalPacmanActions()):
+                self.PreviusMove = Directions.NORTH
                 return Directions.NORTH
             else:
-                return Directions.STOP
+                if(self.PreviusMove in state.getLegalPacmanActions()):
+                    return self.PreviusMove
+                else:
+                    return Directions.STOP
         elif(randDir == 2):
             if (Directions.SOUTH in state.getLegalPacmanActions()):
+                self.PreviusMove = Directions.SOUTH
                 return Directions.SOUTH
             else:
-                return Directions.STOP
+                if(self.PreviusMove in state.getLegalPacmanActions()):
+                    return self.PreviusMove
+                else:
+                    return Directions.STOP
         elif(randDir == 3):
             if (Directions.EAST in state.getLegalPacmanActions()):
+                self.PreviusMove = Directions.EAST
                 return Directions.EAST
             else:
-                return Directions.STOP
+                if(self.PreviusMove in state.getLegalPacmanActions()):
+                    return self.PreviusMove
+                else:
+                    return Directions.STOP
         else:
             if (Directions.WEST in state.getLegalPacmanActions()):
+                self.PreviusMove = Directions.WEST
                 return Directions.WEST
             else:
-                return Directions.STOP
+                if(self.PreviusMove in state.getLegalPacmanActions()):
+                    return self.PreviusMove
+                else:
+                    return Directions.STOP
         
     def directions(self,state,seq):
         "Get directions based on a possible sequence"
@@ -101,6 +118,8 @@ class DumbAgent(Agent):
         posCaps = np.array(state.getCapsules())
         posFood = state.getFood()
 
+        print(state.getNumFood())
+
         if(self.numCaps == None):
             self.numCaps = len(posCaps)
         elif(self.numCaps != len(posCaps)):
@@ -112,12 +131,12 @@ class DumbAgent(Agent):
         if(self.Attack != None):
             self.Attack += 1
 
-        if(np.linalg.norm(posG[0]-posP) < np.linalg.norm(posG[1]-posP)):
-            distG = np.linalg.norm(posG[0]-posP)
-            indG =  0
-        else:
-            distG = np.linalg.norm(posG[1]-posP)
-            indG =  1
+        minDistGhost = 99999
+        indG = None
+        for i in range(len(posG)):
+            if(np.linalg.norm(posG[i]-posP) < minDistGhost):
+                minDistGhost = np.linalg.norm(posG[i]-posP)
+                indG =  i
 
         if(posG[indG][0] > posP[0]):
             if(posG[indG][1] > posP[1]):
@@ -172,33 +191,10 @@ class DumbAgent(Agent):
             else:
                 foodRelativePosition = "downleft"
 
-        
         if(len(state.getLegalPacmanActions()) == 2 ):
             path = "deadend"
-        elif(len(state.getLegalPacmanActions()) == 3):
-            if(Directions.SOUTH in state.getLegalPacmanActions() and Directions.NORTH in state.getLegalPacmanActions()):
-                path = "corridorNS"
-            elif(Directions.WEST in state.getLegalPacmanActions() and Directions.EAST in state.getLegalPacmanActions()):
-                path = "corridorWE"
-            elif(Directions.NORTH in state.getLegalPacmanActions() and Directions.EAST in state.getLegalPacmanActions()):
-                path = "cornerNE"
-            elif(Directions.NORTH in state.getLegalPacmanActions() and Directions.WEST in state.getLegalPacmanActions()):
-                path = "cornerNW"
-            elif(Directions.SOUTH in state.getLegalPacmanActions() and Directions.EAST in state.getLegalPacmanActions()):
-                path = "cornerSE"
-            else:
-                path = "cornerSW"
-        elif(len(state.getLegalPacmanActions()) == 4):
-            if(Directions.SOUTH in state.getLegalPacmanActions() and Directions.NORTH in state.getLegalPacmanActions() and Directions.WEST in state.getLegalPacmanActions()):
-                path = "TSNW"
-            elif(Directions.SOUTH in state.getLegalPacmanActions() and Directions.NORTH in state.getLegalPacmanActions() and Directions.EAST in state.getLegalPacmanActions()):
-                path = "TSNE"
-            elif(Directions.SOUTH in state.getLegalPacmanActions() and Directions.EAST in state.getLegalPacmanActions() and Directions.WEST in state.getLegalPacmanActions()):
-                path = "TSEW"
-            else:
-                path = "TNEW"
         else:
-            path = "intersection"
+            path = None
 
         if(path == "deadend"):
             if (Directions.SOUTH in state.getLegalPacmanActions()):
@@ -210,7 +206,7 @@ class DumbAgent(Agent):
             else:
                 return Directions.EAST
 
-        elif(distG < rw.pmt[0] and self.Attack == None):
+        elif(minDistGhost < rw.pmt[0] and self.Attack == None):
             if(ghostRelativePosition == "right"):
                 return self.directions(state,self.PossibleDirections[rw.pmt[2]])
 
@@ -235,7 +231,6 @@ class DumbAgent(Agent):
             elif(ghostRelativePosition == "upright"):
                 return self.directions(state,self.PossibleDirections[rw.pmt[9]])
         else:
-            # if(path == "corridorNS"):
             if(foodRelativePosition == "right"):
                 return self.directionsProb(state=state,p1=rw.pmt[10],p2=rw.pmt[11],p3=rw.pmt[12],p4=rw.pmt[13])
 
@@ -259,27 +254,3 @@ class DumbAgent(Agent):
             
             elif(foodRelativePosition == "upright"):
                 return self.directionsProb(state=state,p1=rw.pmt[38],p2=rw.pmt[39],p3=rw.pmt[40],p4=rw.pmt[41])
-
-                
-            # elif(path == "corridorWE"):
-            #     return self.directionsProb(state=state,p3=rw.pmt[12],p4=rw.pmt[13])
-            # elif(path == "cornerNE"):
-            #     return self.directionsProb(state=state,p1=rw.pmt[14],p3=rw.pmt[15])
-            # elif(path == "cornerNW"):
-            #     return self.directionsProb(state=state,p1=rw.pmt[16],p4=rw.pmt[17])
-            # elif(path == "cornerSE"):
-            #     return self.directionsProb(state=state,p2=rw.pmt[18],p3=rw.pmt[19])
-            # elif(path == "cornerSW"):
-            #     return self.directionsProb(state=state,p2=rw.pmt[20],p4=rw.pmt[21])
-            # elif(path == "TSNW"):
-            #     return self.directionsProb(state=state,p1=rw.pmt[22],p2=rw.pmt[23],p4=rw.pmt[24])
-            # elif(path == "TSNE"):
-            #     return self.directionsProb(state=state,p1=rw.pmt[25],p2=rw.pmt[26],p3=rw.pmt[27])
-            # elif(path == "TSEW"):
-            #     return self.directionsProb(state=state,p2=rw.pmt[28],p3=rw.pmt[29],p4=rw.pmt[30])
-            # elif(path == "TNEW"):
-            #     return self.directionsProb(state=state,p1=rw.pmt[31],p3=rw.pmt[32],p4=rw.pmt[33])
-            # elif(path == "intersection"):
-            #     return self.directionsProb(state=state,p1=rw.pmt[34],p2=rw.pmt[35],p3=rw.pmt[36],p4=rw.pmt[37])
-            # else:
-            #     return Directions.STOP
