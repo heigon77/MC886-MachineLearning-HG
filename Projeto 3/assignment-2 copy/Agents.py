@@ -117,9 +117,7 @@ class DumbAgent(Agent):
         posP = np.array(state.getPacmanPosition())
         posCaps = np.array(state.getCapsules())
         posFood = state.getFood()
-
-        print(state.getNumFood())
-
+        
         if(self.numCaps == None):
             self.numCaps = len(posCaps)
         elif(self.numCaps != len(posCaps)):
