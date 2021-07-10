@@ -675,7 +675,11 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
         avg = sum(scores) / float(len(scores))
         rating = [wins.count(True), winRate]
         
-        with open('results.txt','a') as f:
+        with open('nome.txt', 'r') as f:
+            lines = f.readlines()
+            nome = lines[0]
+
+        with open('results_' + nome + '.txt','a') as f:
             string = str(avg) + " " + str(rating[0])  + " " + str(rating[1]) + " " + str(avgFood) + " " + str(avgCaps)  + " " + str(avgTime) + '\n'
             f.write(string)
 

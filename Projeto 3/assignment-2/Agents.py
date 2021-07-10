@@ -4,7 +4,7 @@ from CrossOver import CrossOver
 import numpy as np
 from numpy.random import choice
 
-class DumbAgent(Agent):
+class DumbAgent (Agent):
     "An agent that goes West until it can't." 
 
     def directions(self,state,p1=0,p2=0,p3=0,p4=0):
