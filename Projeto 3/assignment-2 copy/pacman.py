@@ -679,9 +679,16 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
             lines = f.readlines()
             nome = lines[0]
 
+        with open('moves.txt', 'r') as f:
+            lines = f.readlines()
+            moves = (float(lines[0]) / len(scores))
+
         with open('results_' + nome + '.txt','a') as f:
-            string = str(avg) + " " + str(rating[0])  + " " + str(rating[1]) + " " + str(avgFood) + " " + str(avgCaps)  + " " + str(avgTime) + '\n'
+            string = str(avg) + " " + str(rating[0])  + " " + str(rating[1]) + " " + str(avgFood) + " " + str(avgCaps)  + " " + str(avgTime) + " " + str(moves) + '\n'
             f.write(string)
+
+        with open('moves.txt', 'w') as f:
+            f.write('')
 
     return games
 

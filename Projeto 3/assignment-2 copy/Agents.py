@@ -11,6 +11,7 @@ class DumbAgent(Agent):
     GhostVulnerable = False
     Attack = None
     PreviusMove = None
+    moves = 0
 
     PossibleDirections = [
         [1,2,3,4], 
@@ -111,7 +112,7 @@ class DumbAgent(Agent):
 
     def getAction(self, state):
         "The agent receives a GameState (defined in pacman.py)."
-
+        self.moves += 1
         rw = ReadWrite()
         posG = np.array(state.getGhostPositions())
         posP = np.array(state.getPacmanPosition())
@@ -253,6 +254,12 @@ class DumbAgent(Agent):
             elif(foodRelativePosition == "upright"):
                 return self.directionsProb(state=state,p1=rw.pmt[38],p2=rw.pmt[39],p3=rw.pmt[40],p4=rw.pmt[41])
 
+        
+
     def final(self, state):
         posCaps = np.array(state.getCapsules())
+
+        with open('moves.txt', 'w') as f:
+            f.write(str(self.moves) + '\n')
+
         print ("Acabou",posCaps)
