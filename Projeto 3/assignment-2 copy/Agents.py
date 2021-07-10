@@ -252,3 +252,7 @@ class DumbAgent(Agent):
             
             elif(foodRelativePosition == "upright"):
                 return self.directionsProb(state=state,p1=rw.pmt[38],p2=rw.pmt[39],p3=rw.pmt[40],p4=rw.pmt[41])
+
+    def final(self, state):
+        posCaps = np.array(state.getCapsules())
+        print ("Acabou",posCaps)
