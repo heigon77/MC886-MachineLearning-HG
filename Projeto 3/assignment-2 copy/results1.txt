@@ -1,0 +1,20 @@
+Pacman died! Score: -411
+Pacman emerges victorious! Score: 706
+Pacman died! Score: -183
+Pacman died! Score: -254
+Pacman emerges victorious! Score: 581
+Pacman died! Score: -323
+Pacman died! Score: -199
+Pacman died! Score: -395
+Pacman died! Score: -316
+Pacman died! Score: -146
+Average Score: -94.0
+Scores:        -411.0, 706.0, -183.0, -254.0, 581.0, -323.0, -199.0, -395.0, -316.0, -146.0
+Win Rate:      2/10 (0.20)
+Record:        Loss, Win, Loss, Loss, Win, Loss, Loss, Loss, Loss, Loss
+Traceback (most recent call last):
+  File "pacman.py", line 707, in <module>
+    runGames( **args )
+  File "pacman.py", line 684, in runGames
+    moves = (float(lines[0]) / len(scores))
+IndexError: list index out of range

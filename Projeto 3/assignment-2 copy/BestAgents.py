@@ -112,6 +112,8 @@ class BestAgent (Agent):
         "The agent receives a GameState (defined in pacman.py)."
 
         rw = ReadWriteBest()
+        rw.nome = "originalClassic"
+        rw.read()
         posG = np.array(state.getGhostPositions())
         posP = np.array(state.getPacmanPosition())
         posCaps = np.array(state.getCapsules())

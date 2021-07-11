@@ -61,7 +61,7 @@ class ReadWriteBest():
             lines = f.readlines()
             self.nome = lines[0]
 
-        with open('best_' + self.nome + '.txt', 'r') as f:
+        with open('Best_' + self.nome + '.txt', 'r') as f:
             lines = f.readlines()
             
             self.pmt = lines[self.agentNum].split()
@@ -74,22 +74,20 @@ class ReadWriteBest():
     
     def read(self):
 
-        with open('results_best_' + self.nome + '.txt') as f:
+         with open('Best_' + self.nome + '.txt', 'r') as f:
             lines = f.readlines()
             
-            avgScore = []
-            wins = []
-            rate = []
+            self.pmt = lines[0].split()
 
-            for i in range (3):
-                line = lines[i].split()
-                avgScore.append(line[0])
-                wins.append(line[1])
-                rate.append(line[2])
+            for i in range(len(self.pmt)):
+                if(1<=i<=9):
+                    self.pmt[i] = int(self.pmt[i])
+                else:
+                    self.pmt[i] = float(self.pmt[i])
 
-        with open('results_best_' + self.nome + '.txt','w') as f:
-            f.write("")
+        # with open('results_best_' + self.nome + '.txt','w') as f:
+        #     f.write("")
         
-        with open('results_best_' + self.nome + '.txt','a') as f:
-            string = str((avgScore[0]+avgScore[2])/2) + " " + str(rating[0])  + " " + str(rating[1]) + '\n'
-            f.write(string)
+        # with open('results_best_' + self.nome + '.txt','a') as f:
+        #     string = str((avgScore[0]+avgScore[2])/2) + " " + str(rating[0])  + " " + str(rating[1]) + '\n'
+        #     f.write(string)
