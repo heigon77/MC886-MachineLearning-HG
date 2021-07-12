@@ -631,8 +631,10 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
 
     rules = ClassicGameRules(timeout)
     games = []
-
+    times = []
     for i in range( numGames ):
+        import time
+        start_time = time.time()
         beQuiet = i < numTraining
         if beQuiet:
                 # Suppress output and graphics
@@ -653,15 +655,40 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
             components = {'layout': layout, 'actions': game.moveHistory}
             cPickle.dump(components, f)
             f.close()
+        
+        times.append(time.time() - start_time)
 
     if (numGames-numTraining) > 0:
         scores = [game.state.getScore() for game in games]
         wins = [game.state.isWin() for game in games]
+        food = [game.state.getNumFood() for game in games]
+        caps = [len(game.state.getCapsules()) for game in games]
         winRate = wins.count(True)/ float(len(wins))
+        avgTime = sum(times)/len(times)
+        avgFood = sum(food)/float(len(food))
+        avgCaps = sum(caps)/float(len(caps))
         print 'Average Score:', sum(scores) / float(len(scores))
         print 'Scores:       ', ', '.join([str(score) for score in scores])
         print 'Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate)
         print 'Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins])
+
+        avg = sum(scores) / float(len(scores))
+        rating = [wins.count(True), winRate]
+        
+        with open('nome.txt', 'r') as f:
+            lines = f.readlines()
+            nome = lines[0]
+
+        with open('moves.txt', 'r') as f:
+            lines = f.readlines()
+            moves = (float(lines[0]) / len(scores))
+
+        with open('results_' + nome + '.txt','a') as f:
+            string = str(avg) + " " + str(rating[0])  + " " + str(rating[1]) + " " + str(avgFood) + " " + str(avgCaps)  + " " + str(avgTime) + " " + str(moves) + '\n'
+            f.write(string)
+
+        with open('moves.txt', 'w') as f:
+            f.write('')
 
     return games
 
